@@ -1,13 +1,70 @@
 import React, { Component } from 'react';
-import './App.css';
+import './App.scss';
+import PokemonList from './components/PokemonList';
+import { fetchPokemon } from './services/PokemonService';
+import Filter from './components/Filter';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filteredPokemon: '',
+      infoPokemon: [],
+    }
+
+    this.getFilteredPokemon = this.getFilteredPokemon.bind(this);
+    this.filterPokemon = this.filterPokemon.bind(this);
+    this.getPokemon = this.getPokemon.bind(this);
+  }
+
+  componentDidMount() {
+    this.getPokemon()
+  }
+
+  getPokemon() {
+    fetchPokemon()
+      .then(data => {
+        const promiseList = data.results.map(item => fetch(item.url));
+        Promise.all(promiseList)
+          .then(responses => {
+            const res = responses.map(response => response.json())
+            Promise.all(res)
+              .then(pokemon => {
+                this.setState({
+                  infoPokemon: pokemon
+                })
+                console.log(this.state.infoPokemon);
+              })
+          })
+      })
+  }
+
+  filterPokemon(e) {
+    const query = e.currentTarget.value;
+    this.setState({
+      filteredPokemon: query
+    })
+  }
+
+  getFilteredPokemon() {
+    const { infoPokemon, filteredPokemon } = this.state;
+    console.log(this.state.infoPokemon);
+    return infoPokemon.filter(item => item.name.toUpperCase().includes(filteredPokemon.toUpperCase()));
+
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-        <h1>Pokemones</h1>
+      <div className="app">
+        <header className="app-header">
+          <Filter filterPokemon={this.filterPokemon} />
         </header>
+        <main className="app__main">
+        <div className="container__list">
+          <PokemonList filteredPokemon={this.getFilteredPokemon()} />
+        </div>
+          
+        </main>
       </div>
     );
   }
