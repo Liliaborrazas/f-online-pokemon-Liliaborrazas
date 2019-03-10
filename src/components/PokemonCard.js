@@ -6,20 +6,20 @@ class PokemonDetails extends Component {
         return (
             <Fragment>
                 <div className="item-pokemon">
-                <div className="grey_container">
+                  <div className="grey_container">
                     <img className="img" src={image} alt={name} />
                     <p className="pokemon-id">id / {id}</p>
-                </div>
+                  </div>
                 </div>
                 <div className="information">
-                <h2 className="pokemon-name">{name}</h2>
-                <ul className="pokemon-type">
+                    <h2 className="pokemon-name">{name}</h2>
+                    <ul className="pokemon-type">
                     {types.map((item, index) => {
                         return (
                             <li className="type" key={index}>{item.type.name}</li>
                             )
                         })}
-                </ul>
+                    </ul>
                </div>
             </Fragment>
         );
