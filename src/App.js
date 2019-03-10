@@ -8,8 +8,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filteredPokemon: '',
-      infoPokemon: [],
+      search: '',
+      results: [],
     }
 
     this.getFilteredPokemon = this.getFilteredPokemon.bind(this);
@@ -31,9 +31,9 @@ class App extends Component {
             Promise.all(res)
               .then(pokemon => {
                 this.setState({
-                  infoPokemon: pokemon
+                  results: pokemon
                 })
-                console.log(this.state.infoPokemon);
+                console.log(this.state.results);
               })
           })
       })
@@ -42,14 +42,14 @@ class App extends Component {
   filterPokemon(e) {
     const query = e.currentTarget.value;
     this.setState({
-      filteredPokemon: query
+      search: query
     })
   }
 
   getFilteredPokemon() {
-    const { infoPokemon, filteredPokemon } = this.state;
-    console.log(this.state.infoPokemon);
-    return infoPokemon.filter(item => item.name.toUpperCase().includes(filteredPokemon.toUpperCase()));
+    const { results, search } = this.state;
+    console.log(this.state.results);
+    return results.filter(item => item.name.toUpperCase().includes(search.toUpperCase()));
 
   }
 
